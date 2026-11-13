@@ -13,7 +13,7 @@ this kit. Apps do not draw their own.
 
 ```js
 // package.json
-"placenet-ui": "git+https://github.com/placenet-iop/placenet-ui.git#v0.1.0"
+"placenet-ui": "https://github.com/placenet-iop/placenet-ui/archive/refs/tags/v0.2.0.tar.gz"
 ```
 
 ```svelte

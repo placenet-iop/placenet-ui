@@ -6,8 +6,11 @@ uses for the same things (tab bar, swipe to confirm, day progress, sheets,
 segmented controls, filter pills, calendar, news, toasts, icons).
 
 - **How it looks and when to use what:** [STYLE_GUIDE.md](STYLE_GUIDE.md)
-- **Install in an app:** `"placenet-ui": "git+https://github.com/placenet-iop/placenet-ui.git#vX.Y.Z"`
-  (a tag, never a branch). Source package: no build step, no `prepare` script.
+- **Install in an app:** `"placenet-ui": "https://github.com/placenet-iop/placenet-ui/archive/refs/tags/vX.Y.Z.tar.gz"`
+  (a tag, never a branch). Use the tarball URL, not `github:` or `git+https`: npm
+  rewrites those to `git+ssh` in the lockfile and an image build without an SSH
+  key fails. Install with plain `npm install` (not `--legacy-peer-deps`) when
+  the app's Dockerfile runs plain `npm ci`. Source package: no build step.
 - **Develop:** `npm install --legacy-peer-deps && npm test`
 
 Rules for changes: no hex colour inside `src/components` (a test enforces it),
