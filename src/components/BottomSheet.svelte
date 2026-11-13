@@ -1,29 +1,12 @@
-<script module>
-	// Open sheets, top last: Escape and the focus trap act only on the top one.
-	let stack = [];
-	const FOCUSABLE = [
-		'button:not([disabled])',
-		'[href]',
-		'input:not([disabled]):not([type="hidden"])',
-		'select:not([disabled])',
-		'textarea:not([disabled])',
-		'[tabindex]'
-	]
-		.map((sel) => `${sel}:not([tabindex="-1"])`)
-		.join(', ');
-</script>
-
 <script>
 	/**
 	 * The one "window" of the user views: a sheet from the bottom (a centred
 	 * card on wide screens). Forms, menus ("Más"), details. If it does not fit
-	 * in a sheet it is a page, not a modal.
+	 * in a sheet it is a page, not a modal. Admin views use SidePanel.
 	 *
 	 * - `footer` stays fixed at thumb height; the body scrolls above it.
-	 * - Focus moves into the sheet (the panel, not the first field: a phone
-	 *   keyboard would cover half the sheet), Tab is trapped, and focus returns
-	 *   where it was on close. Escape and a tap outside call `onclose` unless
-	 *   `dismissible` is false (while sending).
+	 * - Focus, Tab trap, Escape and scroll lock: src/dialog.js. A tap outside
+	 *   closes unless `dismissible` is false (while sending).
 	 *
 	 * Origin: shift/src/lib/ui/Sheet.svelte.
 	 *
@@ -31,51 +14,10 @@
 	 *   dismissible?: boolean, onclose: () => void,
 	 *   children: import('svelte').Snippet, footer?: import('svelte').Snippet }}
 	 */
+	import { modal } from '../dialog.js';
+
 	let { open, title = '', ariaLabel = '', closeLabel = '', dismissible = true, onclose, children, footer } = $props();
-
 	const uid = $props.id();
-	let panel = $state(null);
-
-	$effect(() => {
-		if (!open) return;
-		const id = Symbol('sheet');
-		stack = [...stack, id];
-		const isTop = () => stack[stack.length - 1] === id;
-		const previous = document.activeElement;
-		const overflow = document.body.style.overflow;
-		document.body.style.overflow = 'hidden';
-		queueMicrotask(() => panel?.focus({ preventScroll: true }));
-		const onKey = (event) => {
-			if (!isTop() || !panel) return;
-			if (event.key === 'Escape' && dismissible) {
-				event.preventDefault();
-				onclose();
-			} else if (event.key === 'Tab') {
-				const items = [...panel.querySelectorAll(FOCUSABLE)].filter((el) => el.offsetParent !== null);
-				if (!items.length) {
-					event.preventDefault();
-					return;
-				}
-				const first = items[0];
-				const last = items[items.length - 1];
-				const inside = panel.contains(document.activeElement);
-				if (event.shiftKey && (document.activeElement === first || !inside)) {
-					event.preventDefault();
-					last.focus();
-				} else if (!event.shiftKey && (document.activeElement === last || !inside)) {
-					event.preventDefault();
-					first.focus();
-				}
-			}
-		};
-		window.addEventListener('keydown', onKey);
-		return () => {
-			stack = stack.filter((s) => s !== id);
-			window.removeEventListener('keydown', onKey);
-			if (!stack.length) document.body.style.overflow = overflow;
-			if (previous instanceof HTMLElement && document.contains(previous)) previous.focus({ preventScroll: true });
-		};
-	});
 </script>
 
 {#if open}
@@ -88,7 +30,7 @@
 		aria-labelledby={title ? `pn-sheet-${uid}` : undefined}
 		aria-label={title ? undefined : ariaLabel || undefined}
 		tabindex="-1"
-		bind:this={panel}
+		use:modal={{ onclose, dismissible }}
 	>
 		<span class="grip" aria-hidden="true"></span>
 		{#if title || closeLabel}
@@ -148,8 +90,7 @@
 	}
 	.title {
 		margin: 0;
-		font-size: 20px;
-		font-weight: 700;
+		font: 700 var(--pn-text-title) / 1.3 var(--pn-font-heading);
 	}
 	.close {
 		width: 36px;

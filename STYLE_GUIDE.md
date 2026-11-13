@@ -55,21 +55,27 @@ colours in app components: every colour is a token.
 | `--pn-line` / `-strong` | fixed | separators / grips, disabled fills |
 | `--pn-ok/warn/danger/info` (+`-soft`) | fixed | states; text on its soft bg clears AA |
 
-Admin views (`.well-known/placenet/*`) are never tinted by the domain: they
-keep the defaults and use the accent only for the primary button.
+Admin views (`.well-known/placenet/*`) are seen inside the dashboard, so they
+keep the dashboard's page (background, lines, text) and take only the
+**organisation's accent**, as the dashboard tints its own primary buttons:
+`applyTokenTheme(token, { admin: true })`. The domain's bg/fg never apply there.
 
 ## 3. Type, shape, touch
 
-- Font: **Inter** (bundled by the kit; no Google Fonts request). Sizes 12 / 14 / 16 / 18 / 26 (`--pn-text-xs…xl`). Nothing under 12 px.
-- Radius: fields 8, buttons 12, cards 16–20, sheets 24. Cards are white with `--pn-shadow-card`, no grey border.
-- Every tappable thing is at least 44 px (`--pn-touch`).
+The kit's defaults ARE the dashboard's theme (`dashboard/theme/theme.tsx`).
+
+- Fonts: **Roboto** for text, **Rethink Sans** for titles, as in the dashboard (bundled by the kit; no Google Fonts request). Sizes 12 / 14 (body, Mantine md) / 16 / 18 / 20 (section and panel titles, Mantine h4) / 26 (user screen titles). Nothing under 12 px.
+- Radius: inputs 4 (dashboard default), buttons 12, cards 16, sheets 24. User-view cards are white with `--pn-shadow-card`; admin sections are white with a `--pn-line` border, like the dashboard's papers.
+- Every tappable thing is at least 44 px (`--pn-touch`); admin inputs are 40 px tall, buttons 50 (dashboard size lg).
 
 ## 4. Icons
 
-Only `<Icon name="…" />`: Lucide, outline, stroke 1.8, 24 px in the tab bar,
-20–22 px in rows. Semantic names keep apps aligned: `clock` (fichar),
-`shifts`, `timeoff`, `documents`, `payroll`, `news`, `org`, `people`,
-`notifications`, `chat`, `settings`, `more`… Add an icon in
+Only `<Icon name="…" />`: **Tabler**, the dashboard's set (`@tabler/icons-react`
+there, `@tabler/icons-svelte-runes` here), outline. Stroke 1.5 in user views
+(small phone screens), `stroke={1}` in admin views to match the dashboard's
+1px. 24 px in the tab bar, 20–22 px in rows. Semantic names keep apps aligned:
+`clock` (fichar), `shifts`, `timeoff`, `documents`, `payroll`, `news`, `org`,
+`people`, `notifications`, `chat`, `settings`, `more`… Add an icon in
 `src/components/Icon.svelte`, never paste SVG paths into an app.
 
 ## 5. Components and when to use them
@@ -89,7 +95,24 @@ Only `<Icon name="…" />`: Lucide, outline, stroke 1.8, 24 px in the tab bar,
 The kit has **no words of its own**: every label is a prop, in the app's
 language (Spanish defaults only as a fallback).
 
-## 6. Writing
+## 6. Admin views (`placenet-ui/admin`)
+
+The admin of every app is opened from the dashboard (the app's config drawer,
+or the organisation page), so it is built with the dashboard's pieces:
+
+| Need | Component | Like the dashboard's |
+| --- | --- | --- |
+| Page with tabs (Inicio · Contenido · Notificaciones · Dominios · Conexión) | `AdminShell` | Tabs: 14px, padding 16, active in accent with underline. `?tab=` in the address. No big title (the drawer has it). |
+| State on arrival + what needs a look | `StatusSummary` | 3–4 cards; "Requiere atención" links to the fix. |
+| One question of the page | `Section` | Title (Rethink Sans), one line of help, save state on the right; `collapsible` for Avanzado / Conexión. |
+| "Follows the organisation unless changed here" | `InheritField` | *Como la organización* · Personalizar / *Personalizado* · Restablecer. Never tri-state selects. |
+| Save state | `SaveIndicator` + `saveState` / `saveForm` / `autosubmit` | Like the dashboard's autosave: "Guardando… / Guardado / No se guardó · Reintentar". Sections save on change through their existing form action; credentials and legal settings keep an explicit `Button type="submit"`. |
+| A list to work through | `DataTable` | Table module: headers gray.7, cells 16/24, hovered row in accent; search, selection with Shift+click and a bulk bar; cards on a phone. |
+| Edit a row without leaving | `SidePanel` | Drawer from the right, h4 title, blurred page behind. |
+| Inputs | `Field` (text, url, email, number, textarea, select, secret, copy), `Switch` | Mantine md inputs (40px, radius 4), 48×24 switch. Secrets show "•••• Guardado · Cambiar". |
+| Buttons, states, notices | `Button`, `Badge`, `Callout`, `ConfirmInline`, `EmptyState` | Buttons radius 12; confirmations in place, never `window.confirm`. |
+
+## 7. Writing
 
 - To admins: *Organización*, *Dominio*, *Pestañas*, *Personalizado* /
   *Restablecer*, *Conexión propia*, *Personas*, *Rol*. Never "tenant",

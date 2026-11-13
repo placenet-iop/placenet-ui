@@ -92,9 +92,7 @@
 		gap: 6px;
 	}
 	.pn-news-featured .title {
-		font-size: var(--pn-text-lg);
-		font-weight: 700;
-		line-height: 1.3;
+		font: 700 var(--pn-text-lg) / 1.3 var(--pn-font-heading);
 	}
 	.pn-news-row {
 		display: flex;

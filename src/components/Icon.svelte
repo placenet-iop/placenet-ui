@@ -1,105 +1,107 @@
 <script module>
-	// The ONE icon set of every Placenet app: Lucide, outline, stroke 1.8.
-	// Apps name icons (`<Icon name="clock" />`) instead of pasting SVG paths, so
-	// a tab bar in Shift and one in Factorial draw the same clock. To add an
-	// icon: import it here and give it a name (lucide.dev for the catalogue).
-	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
-	import ArrowRight from '@lucide/svelte/icons/arrow-right';
-	import Bell from '@lucide/svelte/icons/bell';
-	import Building from '@lucide/svelte/icons/building-2';
-	import Calendar from '@lucide/svelte/icons/calendar';
-	import CalendarDays from '@lucide/svelte/icons/calendar-days';
-	import Check from '@lucide/svelte/icons/check';
-	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
-	import ChevronRight from '@lucide/svelte/icons/chevron-right';
-	import ChevronsLeft from '@lucide/svelte/icons/chevrons-left';
-	import ChevronsRight from '@lucide/svelte/icons/chevrons-right';
-	import Clock from '@lucide/svelte/icons/clock';
-	import Coffee from '@lucide/svelte/icons/coffee';
-	import Download from '@lucide/svelte/icons/download';
-	import Ellipsis from '@lucide/svelte/icons/ellipsis';
-	import ExternalLink from '@lucide/svelte/icons/external-link';
-	import FileText from '@lucide/svelte/icons/file-text';
-	import Folder from '@lucide/svelte/icons/folder';
-	import Funnel from '@lucide/svelte/icons/funnel';
-	import History from '@lucide/svelte/icons/history';
-	import House from '@lucide/svelte/icons/house';
-	import Image from '@lucide/svelte/icons/image';
-	import Info from '@lucide/svelte/icons/info';
-	import Link from '@lucide/svelte/icons/link';
-	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
-	import LogOut from '@lucide/svelte/icons/log-out';
-	import MapPin from '@lucide/svelte/icons/map-pin';
-	import MessageCircle from '@lucide/svelte/icons/message-circle';
-	import Network from '@lucide/svelte/icons/network';
-	import Newspaper from '@lucide/svelte/icons/newspaper';
-	import Pencil from '@lucide/svelte/icons/pencil';
-	import Plus from '@lucide/svelte/icons/plus';
-	import Receipt from '@lucide/svelte/icons/receipt';
-	import Search from '@lucide/svelte/icons/search';
-	import Settings from '@lucide/svelte/icons/settings';
-	import Share from '@lucide/svelte/icons/share-2';
-	import Star from '@lucide/svelte/icons/star';
-	import Timer from '@lucide/svelte/icons/timer';
-	import Trash from '@lucide/svelte/icons/trash-2';
-	import TreePalm from '@lucide/svelte/icons/tree-palm';
-	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
-	import User from '@lucide/svelte/icons/user';
-	import Users from '@lucide/svelte/icons/users';
-	import X from '@lucide/svelte/icons/x';
+	// The ONE icon set of Placenet: Tabler (outline), the same set the dashboard
+	// uses (@tabler/icons-react there, @tabler/icons-svelte-runes here). Apps name
+	// icons (`<Icon name="clock" />`) instead of pasting SVG paths, so the clock
+	// of Shift, Factorial and the dashboard is the same drawing.
+	// Stroke: the dashboard draws Tabler at 1px (theme/globals.css); admin views
+	// pass stroke={1} to match it, user views keep 1.5 for small phone screens.
+	// To add an icon: import it here and give it a name (tabler.io/icons).
+	import AlertTriangle from '@tabler/icons-svelte-runes/icons/alert-triangle';
+	import ArrowLeft from '@tabler/icons-svelte-runes/icons/arrow-left';
+	import ArrowRight from '@tabler/icons-svelte-runes/icons/arrow-right';
+	import Beach from '@tabler/icons-svelte-runes/icons/beach';
+	import Bell from '@tabler/icons-svelte-runes/icons/bell';
+	import BuildingCommunity from '@tabler/icons-svelte-runes/icons/building-community';
+	import Calendar from '@tabler/icons-svelte-runes/icons/calendar';
+	import CalendarEvent from '@tabler/icons-svelte-runes/icons/calendar-event';
+	import CalendarTime from '@tabler/icons-svelte-runes/icons/calendar-time';
+	import Check from '@tabler/icons-svelte-runes/icons/check';
+	import ChevronDown from '@tabler/icons-svelte-runes/icons/chevron-down';
+	import ChevronLeft from '@tabler/icons-svelte-runes/icons/chevron-left';
+	import ChevronRight from '@tabler/icons-svelte-runes/icons/chevron-right';
+	import ChevronsLeft from '@tabler/icons-svelte-runes/icons/chevrons-left';
+	import ChevronsRight from '@tabler/icons-svelte-runes/icons/chevrons-right';
+	import Clock from '@tabler/icons-svelte-runes/icons/clock';
+	import Coffee from '@tabler/icons-svelte-runes/icons/coffee';
+	import Dots from '@tabler/icons-svelte-runes/icons/dots';
+	import Download from '@tabler/icons-svelte-runes/icons/download';
+	import ExternalLink from '@tabler/icons-svelte-runes/icons/external-link';
+	import FileText from '@tabler/icons-svelte-runes/icons/file-text';
+	import Filter from '@tabler/icons-svelte-runes/icons/filter';
+	import Folder from '@tabler/icons-svelte-runes/icons/folder';
+	import History from '@tabler/icons-svelte-runes/icons/history';
+	import Home from '@tabler/icons-svelte-runes/icons/home';
+	import InfoCircle from '@tabler/icons-svelte-runes/icons/info-circle';
+	import Link from '@tabler/icons-svelte-runes/icons/link';
+	import Loader from '@tabler/icons-svelte-runes/icons/loader-2';
+	import Logout from '@tabler/icons-svelte-runes/icons/logout';
+	import MapPin from '@tabler/icons-svelte-runes/icons/map-pin';
+	import MessageCircle from '@tabler/icons-svelte-runes/icons/message-circle';
+	import News from '@tabler/icons-svelte-runes/icons/news';
+	import Pencil from '@tabler/icons-svelte-runes/icons/pencil';
+	import Photo from '@tabler/icons-svelte-runes/icons/photo';
+	import Plus from '@tabler/icons-svelte-runes/icons/plus';
+	import Receipt from '@tabler/icons-svelte-runes/icons/receipt';
+	import Search from '@tabler/icons-svelte-runes/icons/search';
+	import Settings from '@tabler/icons-svelte-runes/icons/settings';
+	import Share from '@tabler/icons-svelte-runes/icons/share';
+	import Sitemap from '@tabler/icons-svelte-runes/icons/sitemap';
+	import Star from '@tabler/icons-svelte-runes/icons/star';
+	import Trash from '@tabler/icons-svelte-runes/icons/trash';
+	import User from '@tabler/icons-svelte-runes/icons/user';
+	import Users from '@tabler/icons-svelte-runes/icons/users';
+	import X from '@tabler/icons-svelte-runes/icons/x';
 
-	/** Name -> component. Semantic aliases (timeoff, payroll…) keep apps consistent. */
+	/** Name -> component. Semantic names (timeoff, payroll…) keep apps aligned. */
 	export const ICONS = {
 		'arrow-left': ArrowLeft,
 		'arrow-right': ArrowRight,
 		back: ChevronLeft,
 		bell: Bell,
-		building: Building,
+		break: Coffee,
+		building: BuildingCommunity,
 		calendar: Calendar,
-		'calendar-days': CalendarDays,
+		'calendar-event': CalendarEvent,
+		chat: MessageCircle,
 		check: Check,
 		'chevron-down': ChevronDown,
 		'chevron-left': ChevronLeft,
 		'chevron-right': ChevronRight,
 		'chevrons-left': ChevronsLeft,
 		'chevrons-right': ChevronsRight,
-		chat: MessageCircle,
 		clock: Clock,
 		close: X,
-		break: Coffee,
 		documents: Folder,
 		download: Download,
 		edit: Pencil,
 		external: ExternalLink,
 		file: FileText,
-		filter: Funnel,
+		filter: Filter,
 		folder: Folder,
 		history: History,
-		home: House,
-		image: Image,
-		info: Info,
+		home: Home,
+		image: Photo,
+		info: InfoCircle,
 		link: Link,
-		loading: LoaderCircle,
-		logout: LogOut,
-		more: Ellipsis,
-		news: Newspaper,
+		loading: Loader,
+		logout: Logout,
+		more: Dots,
+		news: News,
 		notifications: Bell,
-		org: Network,
+		org: Sitemap,
 		payroll: Receipt,
-		person: User,
 		people: Users,
+		person: User,
 		place: MapPin,
 		plus: Plus,
 		search: Search,
 		settings: Settings,
 		share: Share,
-		shifts: CalendarDays,
+		shifts: CalendarTime,
 		star: Star,
-		timeoff: TreePalm,
-		timer: Timer,
+		timeoff: Beach,
 		trash: Trash,
-		warning: TriangleAlert
+		warning: AlertTriangle
 	};
 </script>
 
@@ -108,14 +110,14 @@
 	 * @typedef {keyof typeof ICONS} IconName
 	 * @type {{ name: IconName, size?: number, stroke?: number, label?: string, class?: string }}
 	 */
-	let { name, size = 24, stroke = 1.8, label = '', class: className = '' } = $props();
+	let { name, size = 24, stroke = 1.5, label = '', class: className = '' } = $props();
 	const Component = $derived(ICONS[name]);
 </script>
 
 {#if Component}
 	<Component
 		{size}
-		strokeWidth={stroke}
+		{stroke}
 		class="pn-icon {className}"
 		aria-hidden={label ? undefined : 'true'}
 		aria-label={label || undefined}

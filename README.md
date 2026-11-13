@@ -1,6 +1,6 @@
 # placenet-ui
 
-Shared UI kit of the Placenet mini-apps (SvelteKit, Svelte 5): design tokens,
+Shared UI kit of the Placenet mini-apps and their admin views (SvelteKit, Svelte 5): the dashboard's tokens,
 the theme read from the PlaceNet service token, and the components every app
 uses for the same things (tab bar, swipe to confirm, day progress, sheets,
 segmented controls, filter pills, calendar, news, toasts, icons).

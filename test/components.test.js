@@ -18,11 +18,18 @@ const text = (s) => createRawSnippet(() => ({ render: () => `<p>${s}</p>` }));
 
 describe('no colour outside the tokens', () => {
 	it('components use custom properties, not hex', () => {
-		const dir = new URL('../src/components/', import.meta.url);
-		for (const file of readdirSync(dir)) {
-			const src = readFileSync(new URL(file, dir), 'utf8');
-			expect(src.match(/#[0-9a-f]{3,6}\b(?![^<]*>)/gi) || [], file).toEqual([]);
+		for (const folder of ['../src/components/', '../src/admin/']) {
+			const dir = new URL(folder, import.meta.url);
+			for (const file of readdirSync(dir).filter((f) => f.endsWith('.svelte'))) {
+				const src = readFileSync(new URL(file, dir), 'utf8');
+				expect(src.match(/#[0-9a-f]{3,6}\b(?![^<]*>)/gi) || [], file).toEqual([]);
+			}
 		}
+	});
+	it('icons come from Tabler, the dashboard set', () => {
+		const src = readFileSync(new URL('../src/components/Icon.svelte', import.meta.url), 'utf8');
+		expect(src).not.toMatch(/lucide/i);
+		expect(src).toMatch(/@tabler\/icons-svelte-runes/);
 	});
 });
 

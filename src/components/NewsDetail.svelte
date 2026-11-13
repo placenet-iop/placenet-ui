@@ -118,9 +118,7 @@
 	}
 	h1 {
 		margin: 0;
-		font-size: 24px;
-		font-weight: 700;
-		line-height: 1.25;
+		font: 700 24px / 1.25 var(--pn-font-heading);
 	}
 	.content {
 		font-size: var(--pn-text-md);

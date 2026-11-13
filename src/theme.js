@@ -129,6 +129,23 @@ export function themeFromUi(ui) {
 	};
 }
 
+/**
+ * Admin views (inside the dashboard): the page is the dashboard's, only the
+ * accent is the organisation's — as the dashboard tints its own primary
+ * buttons with the tenant's colour. Domain colours (bg/fg) never apply here.
+ */
+export function adminThemeFromUi(ui) {
+	const accent = normalizeHex(ui?.color) || normalizeHex(ui?.accent);
+	return {
+		bg: null,
+		ink: null,
+		inkMuted: null,
+		accent,
+		onAccent: accent ? pickInk(accent) : null,
+		accentText: accent ? legibleOn(accent, '#fefdfb', 4.5) : null
+	};
+}
+
 const VARS = {
 	bg: '--pn-bg',
 	ink: '--pn-ink',
@@ -152,9 +169,13 @@ export function applyTheme(theme, root = globalThis.document?.documentElement) {
 	}
 }
 
-/** Shortcut: theme straight from a JWT. `null` clears back to the defaults. */
-export function applyTokenTheme(token, root) {
-	applyTheme(token ? themeFromUi(uiFromToken(token)) : null, root);
+/**
+ * Shortcut: theme straight from a JWT. `admin: true` for .well-known/placenet
+ * views (accent only). `null` token clears back to the defaults.
+ */
+export function applyTokenTheme(token, { admin = false, root } = {}) {
+	const ui = token ? uiFromToken(token) : null;
+	applyTheme(ui ? (admin ? adminThemeFromUi(ui) : themeFromUi(ui)) : null, root);
 }
 
 /**
