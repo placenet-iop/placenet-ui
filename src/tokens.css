@@ -1,0 +1,76 @@
+/*
+ * Placenet UI tokens. One source for every mini-app (see STYLE_GUIDE.md).
+ *
+ * These are the DEFAULTS. At runtime `applyTheme()` (src/theme.js) overrides
+ * the page colours with the service token's `ui` claim: ui.bg / ui.fg are the
+ * DOMAIN's background and text, ui.color the ORGANISATION's accent. Admin
+ * views keep these defaults (never tinted).
+ *
+ * Components use only these custom properties: no hex anywhere else.
+ */
+@import '@fontsource-variable/inter';
+
+:root {
+	/* Type */
+	--pn-font: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	--pn-text-xs: 12px;
+	--pn-text-sm: 14px;
+	--pn-text-md: 16px;
+	--pn-text-lg: 18px;
+	--pn-text-xl: 26px;
+
+	/* Page (from ui.bg / ui.fg when the token carries them) */
+	--pn-bg: #fefdfb;
+	--pn-ink: #000120;
+	--pn-ink-muted: #5f5d6e;
+
+	/* Surfaces and lines */
+	--pn-surface: #ffffff;
+	--pn-surface-muted: #f3f0ea;
+	--pn-line: #e8e3da;
+	--pn-line-strong: #d7cdbc;
+
+	/* Accent (from ui.color; Placenet purple without one) */
+	--pn-accent: #635fe5;
+	--pn-on-accent: #ffffff;
+	--pn-accent-text: #4e42ab; /* the accent as text/icon on --pn-bg, AA-legible */
+	--pn-accent-soft: color-mix(in srgb, var(--pn-accent) 10%, var(--pn-surface));
+	--pn-accent-press: color-mix(in srgb, var(--pn-accent) 85%, black);
+
+	/* States: text on its soft background clears AA */
+	--pn-ok: #1b7a36;
+	--pn-ok-soft: #e6f6ea;
+	--pn-warn: #a8410a;
+	--pn-warn-soft: #fff4e6;
+	--pn-danger: #c02626;
+	--pn-danger-soft: #fff1f1;
+	--pn-info: #1d4ed8;
+	--pn-info-soft: #e8effd;
+	--pn-on-strong: #ffffff; /* text on a solid state colour (danger badge, error toast) */
+
+	/* Shape */
+	--pn-radius-sm: 8px;
+	--pn-radius: 12px;
+	--pn-radius-card: 16px;
+	--pn-radius-sheet: 24px;
+	--pn-shadow-card: 0 1px 3px rgba(15, 18, 51, 0.08), 0 4px 14px rgba(15, 18, 51, 0.05);
+	--pn-shadow-float: 0 8px 28px rgba(15, 18, 51, 0.22);
+	--pn-overlay: rgba(15, 18, 51, 0.45);
+
+	/* Layout */
+	--pn-touch: 44px;
+	--pn-gutter: 20px;
+	--pn-tabbar-h: 0px; /* set by <TabBar> while mounted, so toasts sit above it */
+}
+
+.pn-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}

@@ -1,0 +1,38 @@
+{
+	"name": "placenet-ui",
+	"version": "0.1.0",
+	"description": "Shared UI kit of the Placenet mini-apps: tokens, theme from the service token, and Svelte 5 components.",
+	"license": "UNLICENSED",
+	"type": "module",
+	"svelte": "./src/index.js",
+	"exports": {
+		".": {
+			"svelte": "./src/index.js",
+			"default": "./src/index.js"
+		},
+		"./theme": "./src/theme.js",
+		"./toast": "./src/toast.svelte.js",
+		"./tokens.css": "./src/tokens.css",
+		"./components/*": "./src/components/*"
+	},
+	"files": [
+		"src",
+		"STYLE_GUIDE.md"
+	],
+	"scripts": {
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"@fontsource-variable/inter": "5.3.0",
+		"@lucide/svelte": "1.61.0"
+	},
+	"peerDependencies": {
+		"svelte": "^5.35.0"
+	},
+	"devDependencies": {
+		"@sveltejs/vite-plugin-svelte": "^6.2.4",
+		"svelte": "^5.49.2",
+		"vite": "^7.3.1",
+		"vitest": "^4.1.10"
+	}
+}
