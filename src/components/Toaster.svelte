@@ -25,7 +25,7 @@
 		left: 0;
 		right: 0;
 		bottom: calc(var(--pn-tabbar-h, 0px) + 16px + env(safe-area-inset-bottom));
-		z-index: 90;
+		z-index: 300; /* above BottomSheet (81) and SidePanel (201): a save inside a panel says so */
 		display: flex;
 		flex-direction: column;
 		align-items: center;

@@ -1,6 +1,6 @@
 {
 	"name": "placenet-ui",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "Shared UI kit of the Placenet mini-apps and their admin views: dashboard tokens, theme from the service token, Tabler icons and Svelte 5 components.",
 	"license": "UNLICENSED",
 	"type": "module",
