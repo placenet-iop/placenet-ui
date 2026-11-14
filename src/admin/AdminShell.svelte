@@ -1,4 +1,5 @@
 <script>
+	import { untrack } from 'svelte';
 	/**
 	 * The frame of an app's admin view, as the dashboard draws its own tabs
 	 * (dashboard/theme/css/tabs.module.css): 14px labels, 16px tab padding,
@@ -12,11 +13,23 @@
 	 * - `header` snippet: a domain name + StatusSummary above the tabs.
 	 * - `children(active)` renders the active tab's content.
 	 *
+	 * - `initial`: the ?tab= value as the APP reads it (SvelteKit's page.url),
+	 *   so the server already renders that tab's content: without it nothing
+	 *   showed until the page's JavaScript ran.
+	 *
 	 * @type {{ tabs: Array<{ id: string, label: string, badge?: string | number, alert?: string }>,
-	 *   active?: string, label: string, syncUrl?: boolean,
+	 *   active?: string, initial?: string | null, label: string, syncUrl?: boolean,
 	 *   header?: import('svelte').Snippet, children: import('svelte').Snippet<[string]> }}
 	 */
-	let { tabs, active = $bindable(''), label, syncUrl = true, header, children } = $props();
+	let { tabs, active = $bindable(''), initial = null, label, syncUrl = true, header, children } = $props();
+
+	// Server and first client render agree: the asked tab when it is one, else
+	// the first. Read once, on purpose (untrack): later changes come from clicks.
+	untrack(() => {
+		if (!active || !tabs.some((t) => t.id === active)) {
+			active = tabs.some((t) => t.id === initial) ? initial : tabs[0]?.id || '';
+		}
+	});
 
 	const uid = $props.id();
 	let buttons = $state([]);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { addMonths, isoDate, monthGrid, nextRange, rangeDays, rangePart, weekday, weekdayNames } from '../src/calendar.js';
+import { addMonths, isoDate, monthGrid, monthTitle, nextRange, rangeDays, rangePart, weekday, weekdayNames } from '../src/calendar.js';
 
 describe('dates', () => {
 	it('normalises overflow and moves months across years', () => {
@@ -28,6 +28,12 @@ describe('monthGrid', () => {
 	it('names weekdays in the given language and order', () => {
 		expect(weekdayNames('es', 1, 'short')[0].toLowerCase()).toMatch(/^lun/);
 		expect(weekdayNames('en', 7, 'short')[0]).toMatch(/^Sun/);
+	});
+});
+
+describe('monthTitle', () => {
+	it('capitalises the first letter only', () => {
+		expect(monthTitle('2026-11', 'es')).toBe('Noviembre de 2026');
 	});
 });
 

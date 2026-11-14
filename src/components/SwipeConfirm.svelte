@@ -189,8 +189,10 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0 64px;
+		/* Room for the thumb on its side only, so the label fits one line on a phone. */
+		padding: 0 18px 0 64px;
 		font-size: var(--pn-text-md);
+		line-height: 1.2;
 		font-weight: 600;
 		color: var(--pn-accent-text);
 		pointer-events: none;
@@ -222,6 +224,7 @@
 		opacity: 0.12;
 	}
 	.tone-back .text {
+		padding: 0 64px 0 18px;
 		color: var(--pn-bg);
 		opacity: calc(0.9 - var(--p) * 0.8);
 	}

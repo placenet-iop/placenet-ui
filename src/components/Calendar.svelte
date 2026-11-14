@@ -156,7 +156,6 @@
 	.title {
 		font-size: var(--pn-text-sm);
 		font-weight: 600;
-		text-transform: capitalize;
 	}
 	.arrow {
 		width: var(--pn-touch);

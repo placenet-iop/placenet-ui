@@ -59,7 +59,9 @@ export function weekdayNames(locale = 'es', weekStart = 1, style = 'narrow') {
 /** "diciembre de 2026" in `locale`. */
 export function monthTitle(month, locale = 'es') {
 	const { year, month: m } = parseMonth(month);
-	return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(year, m - 1, 1)));
+	const text = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(year, m - 1, 1)));
+	// First letter only: CSS capitalize gave "Noviembre De 2026".
+	return text.charAt(0).toLocaleUpperCase(locale) + text.slice(1);
 }
 
 /**

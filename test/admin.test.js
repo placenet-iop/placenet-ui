@@ -48,6 +48,21 @@ describe('AdminShell', () => {
 	});
 });
 
+describe('AdminShell first render', () => {
+	const tabs = [
+		{ id: 'home', label: 'Inicio' },
+		{ id: 'domains', label: 'Dominios' }
+	];
+	const children = createRawSnippet((active) => ({ render: () => `<p>panel ${active()}</p>` }));
+	it('renders the asked tab on the server, not an empty panel', () => {
+		expect(html(AdminShell, { label: 'x', tabs, initial: 'domains', syncUrl: false, children })).toContain('<p>panel domains</p>');
+	});
+	it('falls back to the first tab', () => {
+		expect(html(AdminShell, { label: 'x', tabs, initial: 'nope', syncUrl: false, children })).toContain('<p>panel home</p>');
+		expect(html(AdminShell, { label: 'x', tabs, syncUrl: false, children })).toContain('<p>panel home</p>');
+	});
+});
+
 describe('StatusSummary', () => {
 	it('lists cards and the problems to fix', () => {
 		const out = html(StatusSummary, {
