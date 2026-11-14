@@ -106,6 +106,11 @@ describe('News', () => {
 		expect(out.match(/pn-news-row/g)).toHaveLength(2);
 		expect(out).toContain('aria-label="Sin leer"');
 	});
+	it('a row without an image can show a placeholder (initials)', () => {
+		const out = html(NewsList, { items: [{ id: 'a', title: 'Uno' }, { id: 'b', title: 'Dos', placeholder: 'GH' }], featured: false });
+		expect(out).toContain('class="ph');
+		expect(out).toContain('GH');
+	});
 	it('filters by source', () => {
 		const out = html(NewsList, { items, filter: 'people', filters: [{ value: 'all', label: 'Todas' }, { value: 'people', label: 'Personas' }] });
 		expect(out).toContain('Calendario de formación');

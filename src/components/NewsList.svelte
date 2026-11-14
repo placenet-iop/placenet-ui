@@ -3,7 +3,7 @@
 	 * A news page: filters on top, the first item featured, the rest as rows.
 	 * Empty and filtered-empty states are the app's words (`empty`).
 	 *
-	 * Items: { id, title, href?, image?, meta?, source?, unread?, badge? }.
+	 * Items: { id, title, href?, image?, meta?, source?, unread?, badge?, placeholder?, onimageerror? }.
 	 * With `filters`, items are filtered by `item.source === filter` (the
 	 * value 'all' shows everything).
 	 *
@@ -41,13 +41,23 @@
 		{#if empty}<p class="empty">{empty}</p>{/if}
 	{:else}
 		{#if top}
-			<NewsCard variant="featured" title={top.title} href={top.href} image={top.image} meta={top.meta} badge={top.badge} onclick={open(top)} />
+			<NewsCard variant="featured" title={top.title} href={top.href} image={top.image} meta={top.meta} badge={top.badge} onimageerror={top.onimageerror} onclick={open(top)} />
 		{/if}
 		{#if rest.length}
 			<ul>
 				{#each rest as item (item.id)}
 					<li>
-						<NewsCard title={item.title} href={item.href} image={item.image} meta={item.meta} unread={item.unread} {unreadLabel} onclick={open(item)} />
+						<NewsCard
+							title={item.title}
+							href={item.href}
+							image={item.image}
+							meta={item.meta}
+							unread={item.unread}
+							placeholder={item.placeholder}
+							onimageerror={item.onimageerror}
+							{unreadLabel}
+							onclick={open(item)}
+						/>
 					</li>
 				{/each}
 			</ul>

@@ -9,15 +9,32 @@
 	 * line up.
 	 *
 	 * @type {{ variant?: 'featured' | 'row', title: string, href?: string, onclick?: (e: MouseEvent) => void,
-	 *   image?: string, meta?: string, badge?: string, unread?: boolean, unreadLabel?: string }}
+	 *   image?: string, meta?: string, badge?: string, unread?: boolean, unreadLabel?: string,
+	 *   placeholder?: string, onimageerror?: () => void }}
+	 *
+	 * `placeholder`: what the thumb shows without an image (e.g. the source's
+	 * initials); `onimageerror`: an image that fails to load (an expired link),
+	 * so the app can drop it and draw the placeholder instead.
 	 */
-	let { variant = 'row', title, href = '#', onclick, image = '', meta = '', badge = '', unread = false, unreadLabel = 'Sin leer' } = $props();
+	let {
+		variant = 'row',
+		title,
+		href = '#',
+		onclick,
+		image = '',
+		meta = '',
+		badge = '',
+		unread = false,
+		unreadLabel = 'Sin leer',
+		placeholder = '',
+		onimageerror
+	} = $props();
 </script>
 
 {#if variant === 'featured'}
 	<a class="pn-news-featured" {href} {onclick}>
 		<div class="hero">
-			{#if image}<img src={image} alt="" loading="lazy" decoding="async" />{/if}
+			{#if image}<img src={image} alt="" loading="lazy" decoding="async" onerror={onimageerror} />{/if}
 			{#if badge}<span class="badge">{badge}</span>{/if}
 		</div>
 		<div class="body">
@@ -27,7 +44,9 @@
 	</a>
 {:else}
 	<a class="pn-news-row" {href} {onclick}>
-		<span class="thumb">{#if image}<img src={image} alt="" loading="lazy" decoding="async" />{/if}</span>
+		<span class="thumb">
+			{#if image}<img src={image} alt="" loading="lazy" decoding="async" onerror={onimageerror} />{:else if placeholder}<span class="ph" aria-hidden="true">{placeholder}</span>{/if}
+		</span>
 		<span class="text">
 			{#if meta}<span class="meta">{meta}</span>{/if}
 			<span class="title">{title}</span>
@@ -108,6 +127,16 @@
 		border-radius: 14px;
 		overflow: hidden;
 		background: var(--pn-accent-soft);
+	}
+	.ph {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--pn-accent);
+		color: var(--pn-on-accent);
+		font: 700 var(--pn-text-md) var(--pn-font-heading);
 	}
 	.thumb img {
 		width: 100%;
