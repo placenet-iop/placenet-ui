@@ -98,6 +98,37 @@ export function uiFromToken(token) {
 }
 
 /**
+ * Tones derived from the accent, as hex/rgba, so they follow an accent set on
+ * any element (the color-mix() defaults in tokens.css only see :root's).
+ */
+function accentTones(accent, surface) {
+	if (!accent) return { accentSoft: null, accentPress: null, focus: null };
+	const [r, g, b] = [1, 3, 5].map((i) => parseInt(accent.slice(i, i + 2), 16));
+	return {
+		accentSoft: mixHex(accent, surface, 92),
+		accentPress: mixHex(accent, '#000000', 15),
+		focus: `rgba(${r}, ${g}, ${b}, 0.3)`
+	};
+}
+
+/**
+ * Surfaces for a DARK page (cards, sheets, the tab bar, pills): a lighter
+ * shade of the page itself, so the page's light ink stays readable on them.
+ * On a light page the white defaults stay (null).
+ */
+function darkSurfaces(bg, ink, inkMuted) {
+	if (pickInk(bg) !== INK_LIGHT) return { surface: null, surfaceMuted: null, line: null, lineStrong: null, inkSubtle: null };
+	const surface = mixHex(bg, INK_LIGHT, 8);
+	return {
+		surface,
+		surfaceMuted: mixHex(bg, INK_LIGHT, 4),
+		line: mixHex(bg, INK_LIGHT, 16),
+		lineStrong: mixHex(bg, INK_LIGHT, 28),
+		inkSubtle: contrastRatio(inkMuted, surface) >= 4.5 ? inkMuted : ink
+	};
+}
+
+/**
  * The palette for a `ui` claim. Every entry is null when the claim does not
  * set it, so the CSS default stays.
  *
@@ -107,6 +138,10 @@ export function uiFromToken(token) {
  *   accent     organisation colour        (ui.color, or `ui.accent` for apps that send it)
  *   onAccent   text on the accent
  *   accentText the accent as text/icon on the page, walked to 3:1 (large/bold use)
+ *   surface, surfaceMuted, line, lineStrong, inkSubtle
+ *              only on a dark page: shades of it, so cards keep the light ink readable
+ *   accentSoft, accentPress, focus
+ *              the accent's tones (see accentTones)
  */
 export function themeFromUi(ui) {
 	const bg = normalizeHex(ui?.bg);
@@ -119,13 +154,18 @@ export function themeFromUi(ui) {
 		if (contrastRatio(inkMuted, bg) < 4.5) inkMuted = ink;
 	}
 	const page = bg || '#fefdfb';
+	const surfaces = bg ? darkSurfaces(bg, ink, inkMuted) : darkSurfaces('#ffffff', null, null);
+	// On a dark page the default purple's tones must be redone against the dark surface too.
+	const toneAccent = accent || (surfaces.surface ? DEFAULT_ACCENT : null);
 	return {
 		bg,
 		ink,
 		inkMuted,
 		accent,
 		onAccent: accent ? pickInk(accent) : null,
-		accentText: accent ? legibleOn(accent, page, 3) : null
+		accentText: accent ? legibleOn(accent, page, 3) : surfaces.surface ? legibleOn(DEFAULT_ACCENT, page, 3) : null,
+		...surfaces,
+		...accentTones(toneAccent, surfaces.surface || '#ffffff')
 	};
 }
 
@@ -142,7 +182,13 @@ export function adminThemeFromUi(ui) {
 		inkMuted: null,
 		accent,
 		onAccent: accent ? pickInk(accent) : null,
-		accentText: accent ? legibleOn(accent, '#fefdfb', 4.5) : null
+		accentText: accent ? legibleOn(accent, '#fefdfb', 4.5) : null,
+		surface: null,
+		surfaceMuted: null,
+		line: null,
+		lineStrong: null,
+		inkSubtle: null,
+		...accentTones(accent, '#ffffff')
 	};
 }
 
@@ -152,7 +198,15 @@ const VARS = {
 	inkMuted: '--pn-ink-muted',
 	accent: '--pn-accent',
 	onAccent: '--pn-on-accent',
-	accentText: '--pn-accent-text'
+	accentText: '--pn-accent-text',
+	accentSoft: '--pn-accent-soft',
+	accentPress: '--pn-accent-press',
+	focus: '--pn-focus',
+	surface: '--pn-surface',
+	surfaceMuted: '--pn-surface-muted',
+	line: '--pn-line',
+	lineStrong: '--pn-line-strong',
+	inkSubtle: '--pn-ink-subtle'
 };
 
 /**
@@ -183,7 +237,7 @@ export function applyTokenTheme(token, { admin = false, root } = {}) {
  * colours (no flash of the default background). It reads the last palette the
  * app stored with rememberTheme(). Origin: shift's anti-flicker bootstrap.
  */
-export const THEME_BOOTSTRAP = `(function(){try{var t=JSON.parse(localStorage.getItem('pn-theme')||'null');if(!t)return;var s=document.documentElement.style,m={bg:'--pn-bg',ink:'--pn-ink',inkMuted:'--pn-ink-muted',accent:'--pn-accent',onAccent:'--pn-on-accent',accentText:'--pn-accent-text'};for(var k in m){if(t[k])s.setProperty(m[k],t[k]);}}catch(e){}})();`;
+export const THEME_BOOTSTRAP = `(function(){try{var t=JSON.parse(localStorage.getItem('pn-theme')||'null');if(!t)return;var s=document.documentElement.style,m={bg:'--pn-bg',ink:'--pn-ink',inkMuted:'--pn-ink-muted',accent:'--pn-accent',onAccent:'--pn-on-accent',accentText:'--pn-accent-text',accentSoft:'--pn-accent-soft',accentPress:'--pn-accent-press',focus:'--pn-focus',surface:'--pn-surface',surfaceMuted:'--pn-surface-muted',line:'--pn-line',lineStrong:'--pn-line-strong',inkSubtle:'--pn-ink-subtle'};for(var k in m){if(t[k])s.setProperty(m[k],t[k]);}}catch(e){}})();`;
 
 /** Store the palette for THEME_BOOTSTRAP; storage may be blocked (private mode, webviews). */
 export function rememberTheme(theme) {

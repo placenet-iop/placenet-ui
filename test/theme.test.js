@@ -42,7 +42,7 @@ describe('pickInk and legibleOn', () => {
 
 describe('themeFromUi', () => {
 	it('is all null without a claim, so the CSS defaults stay', () => {
-		expect(themeFromUi(null)).toEqual({ bg: null, ink: null, inkMuted: null, accent: null, onAccent: null, accentText: null });
+		expect(Object.values(themeFromUi(null)).every((v) => v === null)).toBe(true);
 	});
 	it('keeps the domain text colour when it reads on its background', () => {
 		const t = themeFromUi({ bg: '#fefdfb', fg: '#1f1f33', color: '#0f7c7e' });
@@ -88,5 +88,36 @@ describe('applyTheme', () => {
 		expect(styles.has('--pn-ink')).toBe(false);
 		applyTheme(null, root);
 		expect(styles.size).toBe(0);
+	});
+});
+
+describe('dark pages keep cards readable', () => {
+	it('a dark domain gets dark surfaces the light ink reads on', async () => {
+		const { themeFromUi, contrastRatio } = await import('../src/theme.js');
+		const t = themeFromUi({ bg: '#14213d', fg: '#ffffff', color: '#0f7c7e' });
+		expect(t.surface).not.toBeNull();
+		expect(contrastRatio(t.ink, t.surface)).toBeGreaterThanOrEqual(4.5);
+		expect(contrastRatio(t.inkSubtle, t.surface)).toBeGreaterThanOrEqual(4.5);
+		expect(t.accentSoft).toMatch(/^#[0-9a-f]{6}$/);
+		expect(contrastRatio(t.ink, t.accentSoft)).toBeGreaterThanOrEqual(4.5);
+	});
+	it('a dark domain without an accent still redoes the purple tones', async () => {
+		const { themeFromUi } = await import('../src/theme.js');
+		const t = themeFromUi({ bg: '#000000' });
+		expect(t.accent).toBeNull();
+		expect(t.accentSoft).not.toBeNull();
+	});
+	it('a light domain keeps the white surfaces', async () => {
+		const { themeFromUi } = await import('../src/theme.js');
+		const t = themeFromUi({ bg: '#fff8e1', color: '#0f7c7e' });
+		expect(t.surface).toBeNull();
+		expect(t.line).toBeNull();
+		expect(t.focus).toBe('rgba(15, 124, 126, 0.3)');
+	});
+	it('admin sets the accent tones and nothing of the page', async () => {
+		const { adminThemeFromUi } = await import('../src/theme.js');
+		const t = adminThemeFromUi({ color: '#0f7c7e', bg: '#000000' });
+		expect(t.surface).toBeNull();
+		expect(t.accentPress).toMatch(/^#/);
 	});
 });

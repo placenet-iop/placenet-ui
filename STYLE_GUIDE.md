@@ -121,3 +121,13 @@ or the organisation page), so it is built with the dashboard's pieces:
 - One line of help under a title; more goes behind a link.
 - Saving: admin sections save on change with a "Guardando… / Guardado"
   indicator; credentials and legal settings keep an explicit button.
+
+## Dark domains (0.3.1)
+
+On a domain whose background is dark, `themeFromUi` also sets `--pn-surface`,
+`--pn-surface-muted`, `--pn-line`, `--pn-line-strong` and `--pn-ink-subtle` to
+lighter shades of that background, so cards, sheets, the tab bar and pills keep
+the page's light ink readable. It also writes the accent's tones
+(`--pn-accent-soft`, `--pn-accent-press`, `--pn-focus`) as values, so they follow
+an accent applied on any element, not only `:root`. Apps should drop local
+"white-on-white" workarounds once on 0.3.1.
