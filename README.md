@@ -6,6 +6,8 @@ uses for the same things (tab bar, swipe to confirm, day progress, sheets,
 segmented controls, filter pills, calendar, news, toasts, icons).
 
 - **How it looks and when to use what:** [STYLE_GUIDE.md](STYLE_GUIDE.md)
+- **Rules, release process and which apps use it:** `placenet-app/ui-kit/design.md`
+  in the (private) [documentation](https://github.com/placenet-iop/documentation/blob/master/placenet-app/ui-kit/design.md) repo
 - **Install in an app:** `"placenet-ui": "https://github.com/placenet-iop/placenet-ui/archive/refs/tags/vX.Y.Z.tar.gz"`
   (a tag, never a branch). Use the tarball URL, not `github:` or `git+https`: npm
   rewrites those to `git+ssh` in the lockfile and an image build without an SSH
